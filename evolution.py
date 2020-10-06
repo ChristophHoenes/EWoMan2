@@ -59,7 +59,7 @@ def start_evolution(args, config):
     controller = rep.get_controller()
 
     #create folder for experiment
-    exp_name = "specialist_{}".format(args.enemies)
+    exp_name = "generalist_{}".format(args.enemies)
     if not os.path.exists(exp_name):
         os.mkdir(exp_name)
 
