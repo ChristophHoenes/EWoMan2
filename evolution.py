@@ -91,7 +91,7 @@ def start_evolution(args, config):
 
     # assign fitness to corresponding individuals
     for ind, fit in zip(population, fitness):
-        ind.fitness.values = (fit,)
+        ind.fitness.values = fit
 
     # record statistics and save intermediate results
     top5.update(population)
