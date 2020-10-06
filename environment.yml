@@ -1,0 +1,14 @@
+name: evoman
+channels:
+  - http://conda.anaconda.org/gurobi
+  - Lyken
+  - anaconda
+  - ak_93
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.6
+  - numpy
+
+
