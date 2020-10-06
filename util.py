@@ -16,6 +16,8 @@ def process_config(config, toolbox):
 def select_fitness(fct_name):
     if fct_name == 'default':
         return default_fitness
+    elif fct_name == 'multi':
+        return multi_fitness
     else:
         raise RuntimeError("Unknown type of fitness function encountered! Please check your config.")
 
