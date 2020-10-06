@@ -1,0 +1,33 @@
+{
+  "fitness": "default",
+
+  "mate_select": "crowding_tournament_pairs",
+  "mate_select_args": {
+    "k": 10,
+    "tournsize": 2
+  },
+
+  "mate": "deap_xover_blend",
+  "mate_args": {
+    "rate": 0.5
+  },
+
+  "mutate_offspring": "deap_mutate_gaussian",
+  "mut_off_args": {
+    "ind_prob": 0.2,
+    "mprob": 0.1,
+    "std": 0.3
+  },
+
+  "mutate_parents": "deap_mutate_gaussian",
+  "mut_pop_args": {
+    "ind_prob": 0.3,
+    "mprob": 0.1,
+    "std": 0.3
+  },
+
+  "survive_select": "front_crowding",
+  "survive_args": {
+    "k": 10
+  }
+}

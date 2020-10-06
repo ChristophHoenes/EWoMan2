@@ -43,7 +43,7 @@ def fast_non_dominated_sort(population, k=None):
 
     # assign rank to the corresponding individuals
     for p_id, ind in enumerate(population):
-        ind.rank = rank.get(p_id, default=i+1)
+        ind.rank = rank.get(p_id, i+1)
         # also assign negative rank to use 'fitness' (rank) MAXIMIZING deap functions
         ind.neg_rank = -ind.rank
 
