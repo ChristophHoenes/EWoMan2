@@ -65,6 +65,7 @@ def start_evolution(args, config):
 
     # create environment
     env = Environment(experiment_name=exp_name,
+                      multiplemode="yes",
                       enemies=args.enemies,
                       playermode="ai",
                       player_controller=controller,
