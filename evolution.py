@@ -100,7 +100,6 @@ def start_evolution(args, config):
     # save initial population
     pickle.dump(population, open(os.path.join(save_path, "initial_population"), "wb"))
 
-    # loop through training iterations
     # test fitness of population
     fitness = list(map(lambda p: toolbox.evaluate_fitness(p, env), population))
     fit_evaluations += len(population)
@@ -118,12 +117,17 @@ def start_evolution(args, config):
     for ind in population:
         ind.dist = 0
 
+    # loop through training iterations
     for i in range(1, args.num_iter+1):
 
         # Evolution components
 
         # mating selection
-        partners = list(toolbox.select_mating_partners(population, **config["mate_select_args"]))
+        if i == 0 and config['survive_select'] == 'front_crowding':
+            # in initial population of front_crowding only front/rank information is (can be) used
+            partners = list(toolbox.select_mating_partners(population, fit_attr='neg_rank'))
+        else:
+            partners = list(toolbox.select_mating_partners(population, **config["mate_select_args"]))
 
         # mating mechanism (creating offspring from selection) and random mutation
         # clone parents first
@@ -134,7 +138,9 @@ def start_evolution(args, config):
         # population = toolbox.mutate_parents(population, **config["mut_pop_args"])
         # random mutations of offspring
         offspring = toolbox.mutate_offspring(offspring, **config["mut_off_args"])
-        relations = {i: (2*i, 2*i+1) for i in range(len(partners))}
+        # save parent-offspring relation for deterministic_crowding
+        if config['survive_select'] == 'deterministic_crowding':
+            relations = {i: (2*i, 2*i+1) for i in range(len(partners))}
         # test fitness of offspring
         fitness = list(toolbox.map(lambda p: toolbox.evaluate_fitness(p, env), offspring))
         fit_evaluations += len(offspring)
@@ -146,7 +152,7 @@ def start_evolution(args, config):
         # next generation consists of the survivors of the previous and the offspring
         population = population + offspring
         # survivor selection (define population of next iteration; which individuals are kept)
-        if args.scalarisation:
+        if config['survive_select'] == 'deterministic_crowding':
             population = toolbox.select_survivors(partners, offspring, relations, **config["survive_args"])
         else:
             population = toolbox.select_survivors(population, **config["survive_args"])

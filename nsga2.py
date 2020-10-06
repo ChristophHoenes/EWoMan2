@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 
-def fast_non_dominated_sort(population):
+def fast_non_dominated_sort(population, k=None):
 
     # initialize set of dominated individuals and number of dominating individuals for each member of the population
     S = defaultdict(set)
@@ -9,7 +9,7 @@ def fast_non_dominated_sort(population):
 
     # initialize frontiers and rank
     frontiers = defaultdict(set)
-    rank = defaultdict(int)
+    rank = {}
 
     for p_id, p in enumerate(population):
         for q_id, q in enumerate(population):
@@ -23,6 +23,7 @@ def fast_non_dominated_sort(population):
             frontiers[1].add(p_id)
 
     i = 1
+    num_sorted = 0
     while len(frontiers[i]) != 0:
         Q = set()
         for p_id in frontiers[i]:
@@ -34,9 +35,15 @@ def fast_non_dominated_sort(population):
         i += 1
         frontiers[i] = Q
 
+        # stopping condition if enough individuals have been sorted
+        if k is not None:
+            num_sorted += len(Q)
+            if num_sorted > k:
+                break
+
     # assign rank to the corresponding individuals
     for p_id, ind in enumerate(population):
-        ind.rank = rank[p_id]
+        ind.rank = rank.get(p_id, default=i+1)
         # also assign negative rank to use 'fitness' (rank) MAXIMIZING deap functions
         ind.neg_rank = -ind.rank
 
@@ -50,9 +57,9 @@ def crowding_operator(left_arg, right_arg):
 
 def crowding_operator_cmp(left_arg, right_arg):
     if crowding_operator(left_arg, right_arg):
-        return -1
-    elif crowding_operator(right_arg, left_arg):
         return 1
+    elif crowding_operator(right_arg, left_arg):
+        return -1
     else:
         return 0
 

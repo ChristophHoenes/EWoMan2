@@ -33,6 +33,25 @@ def deap_tournament_pairs(population, k=50, tournsize=3, fit_attr="fitness"):
     return zip(parents[::2], parents[1::2])
 
 
+def crowding_tournament_pairs(population, k=100, tournsize=2, fit_attr="crowding_operator"):
+    if fit_attr == "crowding_operator":
+        winners = []
+        for i in range(k):
+            points = [0] * tournsize
+            rival_ids = np.random.choice(len(population), size=tournsize)
+            rivals = [population[int(r)] for r in rival_ids]
+            for r1 in range(tournsize):
+                for r2 in range(tournsize):
+                    if r2 <= r1:
+                        continue
+                    points[r1] += crowding_operator_cmp(rivals[r1], rivals[r2])
+            arg_max_points = max(zip(points, range(tournsize)))[1]
+            winners.append(rivals[arg_max_points])
+        return zip(winners[::2], winners[1::2])
+    else:
+        return deap_tournament_pairs(population, k=k, tournsize=tournsize, fit_attr=fit_attr)
+
+
 def deap_tournament(population, k=3, tournsize=2, fit_attr="fitness"):
     return tools.selTournament(population, k=k, tournsize=tournsize, fit_attr=fit_attr)
 
@@ -88,7 +107,7 @@ def deap_best(population, k=3, fit_attr="fitness"):
 
 def frontier_level_selection_with_crowding_distance_tiebreak(population, k=100):
     new_population = []
-    population, frontiers = fast_non_dominated_sort(population)
+    population, frontiers = fast_non_dominated_sort(population, k=k)
     i = 1
     while len(new_population) + len(frontiers[i]) <= k:
         f = [population[ind_id] for ind_id in frontiers[i]]
@@ -98,7 +117,7 @@ def frontier_level_selection_with_crowding_distance_tiebreak(population, k=100):
     # last front that doesn't fit completely in the new population
     f = [population[ind_id] for ind_id in frontiers[i]]
     # fill the remaining spots in new population based on crowding operator
-    sorted(f, key=cmp_to_key(crowding_operator_cmp))
+    sorted(f, key=cmp_to_key(crowding_operator_cmp), reverse=True)
     new_population += f[:k-len(new_population)]
     return new_population
 
@@ -119,6 +138,7 @@ def deterministic_crowding(partners, offspring, relations, k):
                 winners.append(tourn[1])
     assert len(winners) == k
     return winners
+
 
 def dist(ind1, ind2):
     return np.abs(np.array(ind1)-np.array(ind2)).sum()

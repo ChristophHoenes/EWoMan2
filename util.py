@@ -71,5 +71,7 @@ def select_selection(fct_name):
         return deterministic_crowding
     elif fct_name == 'front_crowding':
         return frontier_level_selection_with_crowding_distance_tiebreak
+    elif fct_name == 'crowding_tournament_pairs':
+        return crowding_tournament_pairs
     else:
         raise RuntimeError("Unknown type of selection encountered! Please check your config.")
