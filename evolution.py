@@ -64,17 +64,32 @@ def start_evolution(args, config):
         os.mkdir(exp_name)
 
     # create environment
-    env = Environment(experiment_name=exp_name,
-                      multiplemode="yes",
-                      enemies=args.enemies,
-                      playermode="ai",
-                      player_controller=controller,
-                      enemymode="static",
-                      level=args.level,
-                      speed="fastest",
-                      randomini=args.random_loc,
-                      contacthurt=args.contacthurt,
-                      sound="off")
+    if args.scalarisation:
+        env = Environment(experiment_name=exp_name,
+                          multiplemode="yes",
+                          enemies=args.enemies,
+                          playermode="ai",
+                          player_controller=controller,
+                          enemymode="static",
+                          level=args.level,
+                          speed="fastest",
+                          randomini=args.random_loc,
+                          contacthurt=args.contacthurt,
+                          sound="off")
+    else:
+        env = []
+        for enemy in args.enemies:
+            env.append(Environment(experiment_name=exp_name,
+                                   multiplemode="no",
+                                   enemies=[enemy],
+                                   playermode="ai",
+                                   player_controller=controller,
+                                   enemymode="static",
+                                   level=args.level,
+                                   speed="fastest",
+                                   randomini=args.random_loc,
+                                   contacthurt=args.contacthurt,
+                                   sound="off"))
 
     # create initial population
     if args.init_pop == 'random':
@@ -176,6 +191,8 @@ if __name__ == "__main__":
                         help='Whether or not program is run on a UNIX server.')
     parser.add_argument('--representation', default="Neurons", type=str, choices=["Neurons"],
                         help='Type of problem representation.')
+    parser.add_argument('--scalarisation', default=True, type=bool,
+                        help='Whether multi-objective should be aggregated in a single fitness or not.')
 
     args = parser.parse_args()
 
