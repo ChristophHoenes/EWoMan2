@@ -1,11 +1,10 @@
 # EWoMan  
-Evolutionary Computing: Group Assignments  
+Evolutionary Computing: Group Assignment Task 2 (multi-objective)
+
+## Disclaimer  
+Note thet the folder 'evoman' and all its contents were taken from the evoman framework (https://github.com/karinemiras/evoman_framework) and hence those contents must be treated under their lcense.
 
 ## Setup  
-Please clone the evoman framework into this project's root directory:  
-```shell
-git clone https://github.com/karinemiras/evoman_framework.git
-```  
 Install required packages by installing the environment:  
 ```shell
 conda env create -f environment.yml
