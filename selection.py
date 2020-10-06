@@ -1,7 +1,11 @@
+from functools import cmp_to_key
+import random
+
 import numpy as np
 from deap import tools
-import random
-from diversity import compute_centroids, diversity_gain
+
+from diversity import compute_centroids, diversity_gain, crowding_distance_assignment
+from nsga2 import fast_non_dominated_sort, crowding_operator_cmp
 
 
 #def select_strongest_pairs(fitness, num_matings=5):
@@ -24,13 +28,13 @@ def dummy_survivors(population, k=3):
     return [population[i] for i in top_k]
 
 
-def deap_tournament_pairs(population, k=50, tournsize=3):
-    parents = tools.selTournament(population, k=k, tournsize=tournsize)
+def deap_tournament_pairs(population, k=50, tournsize=3, fit_attr="fitness"):
+    parents = tools.selTournament(population, k=k, tournsize=tournsize, fit_attr=fit_attr)
     return zip(parents[::2], parents[1::2])
 
 
-def deap_tournament(population, k=3, tournsize=2):
-    return tools.selTournament(population, k=k, tournsize=tournsize)
+def deap_tournament(population, k=3, tournsize=2, fit_attr="fitness"):
+    return tools.selTournament(population, k=k, tournsize=tournsize, fit_attr=fit_attr)
 
 
 def round_robin_tournament(population, k=100, tournsize=10):
@@ -70,16 +74,34 @@ def diversity_round_robin_tournament(population, k=100, tournsize=10, alpha=0.5)
     return survivors
 
 
-def deap_roulette(population, k=50):
-    return tools.selRoulette(population, k)
+def deap_roulette(population, k=50, fit_attr="fitness"):
+    return tools.selRoulette(population, k, fit_attr=fit_attr)
 
 
-def deap_universal(population, k=50):
-    return tools.selStochasticUniversalSampling(population, k)
+def deap_universal(population, k=50, fit_attr="fitness"):
+    return tools.selStochasticUniversalSampling(population, k, fit_attr=fit_attr)
 
 
-def deap_best(population, k=3):
-    return tools.selBest(population, k)
+def deap_best(population, k=3, fit_attr="fitness"):
+    return tools.selBest(population, k, fit_attr=fit_attr)
+
+
+def frontier_level_selection_with_crowding_distance_tiebreak(population, k=100):
+    new_population = []
+    population, frontiers = fast_non_dominated_sort(population)
+    i = 1
+    while len(new_population) + len(frontiers[i]) <= k:
+        f = [population[ind_id] for ind_id in frontiers[i]]
+        crowding_distance_assignment(f)
+        new_population += f
+        i += 1
+    # last front that doesn't fit completely in the new population
+    f = [population[ind_id] for ind_id in frontiers[i]]
+    # fill the remaining spots in new population based on crowding operator
+    sorted(f, key=cmp_to_key(crowding_operator_cmp))
+    new_population += f[:k-len(new_population)]
+    return new_population
+
 
 def deterministic_crowding(relations, k, tournsize):
     winners = []
