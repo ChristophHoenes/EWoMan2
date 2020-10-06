@@ -19,10 +19,10 @@ def diversity_gain(centroids, individual):
 def crowding_distance_assignment(population):
     num_fitnesses = len(population[0].fitness)
     l = len(population)
-    distances = np.zeros(l)
+    #distances = np.zeros(l)
     for f in range(num_fitnesses):
-        fitnesses = sorted(population, key=population.fitness[f], reverse=True)
-        distances[0] = distances[l-1] = np.inf
+        sorted_pop = sorted(population, key=population.fitness[f], reverse=True)
+        sorted_pop[0].dist = sorted_pop[l-1].dist = np.inf
         for i in range(1, l-1):
-            distances[i] += population[i+1].fitness[f] - population[i-1].fitness[f]
-
+            sorted_pop[i].dist += sorted_pop[i+1].fitness[f] - sorted_pop[i-1].fitness[f]
+    return sorted_pop

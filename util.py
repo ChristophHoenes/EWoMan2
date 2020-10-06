@@ -65,5 +65,7 @@ def select_selection(fct_name):
         return deap_roulette
     elif fct_name == 'deap_universal':
         return deap_universal
+    elif fct_name == 'deterministic_crowding':
+        return deterministic_crowding
     else:
         raise RuntimeError("Unknown type of selection encountered! Please check your config.")

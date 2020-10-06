@@ -3,7 +3,7 @@
 
   "mate_select": "deap_tournament_pairs",
   "mate_select_args": {
-    "k": 100,
+    "k": 10,
     "tournsize": 7
   },
 
@@ -26,9 +26,9 @@
     "std": 0.3
   },
 
-  "survive_select": "round_robin_tournament",
+  "survive_select": "deterministic_crowding",
   "survive_args": {
-    "k": 100,
+    "k": 10,
     "tournsize": 10
   }
 }

@@ -13,10 +13,13 @@ def average_parents(partners, ratio=0.5):
 
 def deap_xover_blend(partners, rate=0.5):
     children = []
+    relations = {}
     for child1, child2 in partners:
         tools.cxBlend(child1, child2, rate)
         del child1.fitness.values
         del child2.fitness.values
+        del child1.dist
+        del child2.dist
         children.append(child1)
         children.append(child2)
     return children

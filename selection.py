@@ -81,3 +81,22 @@ def deap_universal(population, k=50):
 def deap_best(population, k=3):
     return tools.selBest(population, k)
 
+def deterministic_crowding(relations, k, tournsize):
+    winners = []
+    for children in relations:
+        parents = relations[children]
+        if dist(children[0], parents[0]) + dist(children[1], parents[1]) < dist(children[0], parents[1]) + dist(children[1], parents[0]):
+            tournaments = [(children[0], parents[0]), (children[1], parents[1])]
+        else:
+            tournaments = [(children[0], parents[1]), (children[1], parents[0])]
+        for tourn in tournaments:
+            if tourn[0] > tourn[1]:
+                winners.append(tourn[0])
+            else:
+                winners.append(tourn[1])
+    assert len(winners) == k
+    return winners
+
+def dist(ind1, ind2):
+    return abs(ind1-ind2).sum()
+

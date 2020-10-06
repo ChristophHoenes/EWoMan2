@@ -114,13 +114,15 @@ def start_evolution(args, config):
     logs[-1].record(generation=0, fit_evaluations=fit_evaluations, **record)
     # print progress
     print(logs[-1].stream)
+    for ind in population:
+        ind.dist = 0
 
     for i in range(1, args.num_iter+1):
 
         # Evolution components
 
         # mating selection
-        partners = toolbox.select_mating_partners(population, **config["mate_select_args"])
+        partners = list(toolbox.select_mating_partners(population, **config["mate_select_args"]))
 
         # mating mechanism (creating offspring from selection) and random mutation
         # clone parents first
@@ -131,19 +133,19 @@ def start_evolution(args, config):
         # population = toolbox.mutate_parents(population, **config["mut_pop_args"])
         # random mutations of offspring
         offspring = toolbox.mutate_offspring(offspring, **config["mut_off_args"])
-
+        relations = {couple: (offspring[2*i], offspring[2*i+1]) for i, couple in enumerate(partners)}
         # test fitness of offspring
         fitness = list(toolbox.map(lambda p: toolbox.evaluate_fitness(p, env), offspring))
         fit_evaluations += len(offspring)
 
         # assign fitness to corresponding individuals
         for ind, fit in zip(offspring, fitness):
-            ind.fitness.values = (fit,)
+            ind.fitness.values = fit
 
         # next generation consists of the survivors of the previous and the offspring
         population = population + offspring
         # survivor selection (define population of next iteration; which individuals are kept)
-        population = toolbox.select_survivors(population, **config["survive_args"])
+        population = toolbox.select_survivors(relations, **config["survive_args"])
 
         # record statistics and save intermediate results
         top5.update(population)
