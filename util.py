@@ -67,5 +67,7 @@ def select_selection(fct_name):
         return deap_roulette
     elif fct_name == 'deap_universal':
         return deap_universal
+    elif fct_name == 'front_crowding':
+        return frontier_level_selection_with_crowding_distance_tiebreak
     else:
         raise RuntimeError("Unknown type of selection encountered! Please check your config.")

@@ -43,9 +43,18 @@ def fast_non_dominated_sort(population):
     return population, frontiers
 
 
-def crouding_operator(left_arg, right_arg):
+def crowding_operator(left_arg, right_arg):
     return left_arg.rank < right_arg.rank or \
            (left_arg.rank == right_arg.rank and left_arg.distance > right_arg.distance)
+
+
+def crowding_operator_cmp(left_arg, right_arg):
+    if crowding_operator(left_arg, right_arg):
+        return -1
+    elif crowding_operator(right_arg, left_arg):
+        return 1
+    else:
+        return 0
 
 
 def domination_operator(left_arg, right_arg):
