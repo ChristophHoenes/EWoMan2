@@ -2,6 +2,7 @@
 import argparse
 import json
 import pickle
+import random
 import sys
 import os
 from time import time, strftime, gmtime
@@ -203,6 +204,7 @@ if __name__ == "__main__":
     # set seed
     if args.seed is not None:
         np.random.seed(args.seed)
+        random.seed(args.seed)
 
     # load config from file
     with open('configs/{}'.format(args.config)) as c:

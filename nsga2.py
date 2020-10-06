@@ -37,6 +37,8 @@ def fast_non_dominated_sort(population):
     # assign rank to the corresponding individuals
     for p_id, ind in enumerate(population):
         ind.rank = rank[p_id]
+        # also assign negative rank to use 'fitness' (rank) MAXIMIZING deap functions
+        ind.neg_rank = -ind.rank
 
     return population, frontiers
 
