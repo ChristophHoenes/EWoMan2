@@ -28,7 +28,6 @@
 
   "survive_select": "deterministic_crowding",
   "survive_args": {
-    "k": 10,
-    "tournsize": 10
+    "k": 10
   }
 }

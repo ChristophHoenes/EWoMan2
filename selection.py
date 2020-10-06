@@ -103,10 +103,11 @@ def frontier_level_selection_with_crowding_distance_tiebreak(population, k=100):
     return new_population
 
 
-def deterministic_crowding(relations, k, tournsize):
+def deterministic_crowding(partners, offspring, relations, k):
     winners = []
-    for children in relations:
-        parents = relations[children]
+    for idx in relations:
+        children = (offspring[relations[idx][0]], offspring[relations[idx][1]])
+        parents = partners[idx]
         if dist(children[0], parents[0]) + dist(children[1], parents[1]) < dist(children[0], parents[1]) + dist(children[1], parents[0]):
             tournaments = [(children[0], parents[0]), (children[1], parents[1])]
         else:
@@ -120,5 +121,5 @@ def deterministic_crowding(relations, k, tournsize):
     return winners
 
 def dist(ind1, ind2):
-    return abs(ind1-ind2).sum()
+    return np.abs(np.array(ind1)-np.array(ind2)).sum()
 

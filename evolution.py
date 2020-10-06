@@ -134,7 +134,7 @@ def start_evolution(args, config):
         # population = toolbox.mutate_parents(population, **config["mut_pop_args"])
         # random mutations of offspring
         offspring = toolbox.mutate_offspring(offspring, **config["mut_off_args"])
-        relations = {couple: (offspring[2*i], offspring[2*i+1]) for i, couple in enumerate(partners)}
+        relations = {i: (2*i, 2*i+1) for i in range(len(partners))}
         # test fitness of offspring
         fitness = list(toolbox.map(lambda p: toolbox.evaluate_fitness(p, env), offspring))
         fit_evaluations += len(offspring)
@@ -146,7 +146,10 @@ def start_evolution(args, config):
         # next generation consists of the survivors of the previous and the offspring
         population = population + offspring
         # survivor selection (define population of next iteration; which individuals are kept)
-        population = toolbox.select_survivors(relations, **config["survive_args"])
+        if args.scalarisation:
+            population = toolbox.select_survivors(partners, offspring, relations, **config["survive_args"])
+        else:
+            population = toolbox.select_survivors(population, **config["survive_args"])
 
         # record statistics and save intermediate results
         top5.update(population)

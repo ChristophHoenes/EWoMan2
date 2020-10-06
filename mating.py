@@ -18,8 +18,8 @@ def deap_xover_blend(partners, rate=0.5):
         tools.cxBlend(child1, child2, rate)
         del child1.fitness.values
         del child2.fitness.values
-        del child1.dist
-        del child2.dist
+        child1.dist = 0
+        child2.dist = 0
         children.append(child1)
         children.append(child2)
     return children
