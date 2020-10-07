@@ -180,7 +180,7 @@ def start_evolution(args, config):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Evolution Parameters.')
-    parser.add_argument('--num_iter', default=30, type=int,
+    parser.add_argument('--num_iter', default=50, type=int,
                         help='Number of iterations of the evolution (number of generated generations).')
     parser.add_argument('--num_neurons',  default=10, type=int,
                         help='Number of neurons used for the population.')
@@ -192,9 +192,9 @@ if __name__ == "__main__":
                         help='Whether or not to randomly initialize location of enemy.')
     parser.add_argument('--contacthurt', default="player", type=str, choices=["player", "enemy"],
                         help='Who is hurt by contact with the opponent.')
-    parser.add_argument('--pop_size', default=10, type=int,
+    parser.add_argument('--pop_size', default=100, type=int,
                         help='Population size (initial number of individuals).')
-    parser.add_argument('--config', default="nsga2.json", type=str,
+    parser.add_argument('--config', default="scalarization.json", type=str,
                         help='Configuration file that specifies some parameters.')
     parser.add_argument('--seed', default=None, type=int,
                         help='Seed for numpy random functions.')
