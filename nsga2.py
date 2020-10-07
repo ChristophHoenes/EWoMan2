@@ -52,7 +52,7 @@ def fast_non_dominated_sort(population, k=None):
 
 def crowding_operator(left_arg, right_arg):
     return left_arg.rank < right_arg.rank or \
-           (left_arg.rank == right_arg.rank and left_arg.distance > right_arg.distance)
+           (left_arg.rank == right_arg.rank and left_arg.dist > right_arg.dist)
 
 
 def crowding_operator_cmp(left_arg, right_arg):

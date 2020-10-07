@@ -103,7 +103,7 @@ def start_evolution(args, config):
 
     # test fitness of population
     fitness = list(map(lambda p: toolbox.evaluate_fitness(p, env), population))
-    fit_evaluations += len(population)
+    fit_evaluations += len(population) * len(args.enemies)
 
     # assign fitness to corresponding individuals
     for ind, fit in zip(population, fitness):
@@ -127,7 +127,7 @@ def start_evolution(args, config):
         if i == 1 and config['mate_select'] == 'crowding_tournament_pairs':
             # in initial population of front_crowding only front/rank information is (can be) used
             population, _ = fast_non_dominated_sort(population)
-            partners = list(toolbox.select_mating_partners(population, fit_attr='neg_rank'))
+            partners = list(toolbox.select_mating_partners(population, k=len(population), fit_attr='neg_rank'))
         else:
             partners = list(toolbox.select_mating_partners(population, **config["mate_select_args"]))
 
@@ -143,9 +143,10 @@ def start_evolution(args, config):
         # save parent-offspring relation for deterministic_crowding
         if config['survive_select'] == 'deterministic_crowding':
             relations = {i: (2*i, 2*i+1) for i in range(len(partners))}
+
         # test fitness of offspring
         fitness = list(toolbox.map(lambda p: toolbox.evaluate_fitness(p, env), offspring))
-        fit_evaluations += len(offspring)
+        fit_evaluations += len(offspring) * len(args.enemies)
 
         # assign fitness to corresponding individuals
         for ind, fit in zip(offspring, fitness):
