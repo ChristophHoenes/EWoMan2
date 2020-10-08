@@ -24,11 +24,11 @@ from nsga2 import fast_non_dominated_sort
 def start_evolution(args, config):
 
     # define deap individuals to maximize fitness value
+    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    creator.create("FitnessMulti", base.Fitness, weights=(1.0,) * len(args.enemies))
     if args.scalarisation:
-        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
         creator.create("Individual", list, fitness=creator.FitnessMax)
     else:
-        creator.create("FitnessMulti", base.Fitness, weights=(1.0,)*len(args.enemies))
         creator.create("Individual", list, fitness=creator.FitnessMulti)
 
     # setup deap toolbox and statistics
@@ -106,7 +106,7 @@ def start_evolution(args, config):
         population_init = pickle.load(open(args.init_pop, "rb"))
         for ind, ind_init in zip(population, population_init):
             ind[:] = ind_init[:]
-            
+
     # save initial population
     pickle.dump(population, open(os.path.join(save_path, "initial_population"), "wb"))
 
