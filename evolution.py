@@ -205,13 +205,13 @@ if __name__ == "__main__":
                         help='Seed for numpy random functions.')
     parser.add_argument('--init_pop', default='random', type=str,
                         help='Path to initial population file (default: random initialization).')
-    parser.add_argument('--multiprocessing', default=False, type=bool,
+    parser.add_argument('--multiprocessing', default=0, type=int, choices=[0, 1],
                         help='Whether or not to use multiprocessing.')
-    parser.add_argument('--server', default=False, type=bool,
+    parser.add_argument('--server', default=0, type=int, choices=[0, 1],
                         help='Whether or not program is run on a UNIX server.')
     parser.add_argument('--representation', default="Neurons", type=str, choices=["Neurons"],
                         help='Type of problem representation.')
-    parser.add_argument('--scalarisation', default=True, type=bool,
+    parser.add_argument('--scalarisation', default=1, type=int, choices=[0, 1],
                         help='Whether multi-objective should be aggregated in a single fitness or not.')
 
     args = parser.parse_args()
