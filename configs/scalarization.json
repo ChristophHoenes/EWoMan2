@@ -1,7 +1,7 @@
 {
   "fitness": "default",
 
-  "mate_select": "crowding_tournament_pairs",
+  "mate_select": "deap_tournament_pairs",
   "mate_select_args": {
     "k": 100,
     "tournsize": 2
