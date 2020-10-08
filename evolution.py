@@ -102,7 +102,11 @@ def start_evolution(args, config):
     if args.init_pop == 'random':
         population = rep.create_population(args.pop_size)
     else:
-        population = pickle.load(open(args.init_pop, "rb"))
+        population = rep.create_population(args.pop_size)
+        population_init = pickle.load(open(args.init_pop, "rb"))
+        for ind, ind_init in zip(population, population_init):
+            ind[:] = ind_init[:]
+            
     # save initial population
     pickle.dump(population, open(os.path.join(save_path, "initial_population"), "wb"))
 
