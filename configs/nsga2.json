@@ -1,5 +1,5 @@
 {
-  "fitness": "default",
+  "fitness": "multi",
 
   "mate_select": "crowding_tournament_pairs",
   "mate_select_args": {

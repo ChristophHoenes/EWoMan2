@@ -24,8 +24,12 @@ from nsga2 import fast_non_dominated_sort
 def start_evolution(args, config):
 
     # define deap individuals to maximize fitness value
-    creator.create("FitnessMax", base.Fitness, weights=(1.0,))
-    creator.create("Individual", list, fitness=creator.FitnessMax)
+    if args.scalarisation:
+        creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+        creator.create("Individual", list, fitness=creator.FitnessMax)
+    else:
+        creator.create("FitnessMulti", base.Fitness, weights=(1.0,)*len(args.enemies))
+        creator.create("Individual", list, fitness=creator.FitnessMulti)
 
     # setup deap toolbox and statistics
     toolbox = base.Toolbox()
