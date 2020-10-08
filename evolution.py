@@ -47,7 +47,8 @@ def start_evolution(args, config):
         toolbox.register("map", map)
 
     # create directory for experiment results
-    save_dir = "{}_enemy{}_seed_{}".format(args.config.split(".json")[0], args.enemies, args.seed)
+    enemies_str = ("{}" + "_{}" * (len(args.enemies) - 1)).format(*args.enemies)
+    save_dir = "{}_enemy{}_seed_{}".format(args.config.split(".json")[0], enemies_str, args.seed)
     save_path = os.path.join(os.getcwd(), save_dir)
     if not os.path.exists(save_path):
         os.mkdir(save_path)
