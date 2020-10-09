@@ -3,19 +3,21 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def plot_stat_mean(stat_key='mean', methods=['method_1', 'method3'], enemy=2, seeds=None, prefix=None, fancy=False, savepath=''):
+def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2'), enemy=(1, 2, 5), seeds=None, prefix=None, fancy=False, savepath=''):
     runs = []
     max_list = []
-
     if seeds is None:
         seeds = [111, 222, 333, 444, 555, 666, 777, 888, 999, 1010]
+
+    enemies_str = ("{}" + "_{}" * (len(enemy) - 1)).format(*enemy)
+
     for method in methods:
-        if method == 'method_1':
-            prefix = 'roundrobin'
-        elif method == 'method3':
-            prefix = 'diversity_075_roundrobin'
+        if method == 'scalarization':
+            prefix = 'scalarization'
+        elif method == 'nsga2':
+            prefix = 'nsga2'
         for seed in seeds:
-            log_path = 'results/{}/{}_enemy{}_seed_{}/logs_iter_30'.format(method, prefix, enemy, seed)
+            log_path = 'results/{}/{}_enemy{}_seed_{}/logs_iter_100'.format(method, prefix, enemies_str, seed)
             logs = pickle.load(open(log_path, "rb"))
             runs.append([step[stat_key] for step in logs[0]])
             if stat_key == 'mean':
@@ -36,7 +38,7 @@ def plot_stat_mean(stat_key='mean', methods=['method_1', 'method3'], enemy=2, se
         if fancy:
             legend_label = ''
 
-            if method =='method_1':
+            if method =='scalarization':
                 m = 'm1'
                 color = 'magenta'
             else:
@@ -53,7 +55,7 @@ def plot_stat_mean(stat_key='mean', methods=['method_1', 'method3'], enemy=2, se
             plt.ylabel(ylab)
             plt.xlabel('iteration')
             plt.rcParams["font.size"] = "20"
-            plt.suptitle('Results for ' + ylab + ' enemy %d' % (enemy))
+            plt.suptitle('Results for ' + ylab + ' enemies {}'.format(enemies_str.replace('_',',')))
         else:
             plt.errorbar(np.arange(len(mean)), mean, std, linestyle='-', marker='o')
 
@@ -75,11 +77,11 @@ def plot_stat(logs, stat_key='mean', savepath=''):
 
 
 if __name__ == "__main__":
-    plot_stat_mean(stat_key='diversity', enemy=7, fancy=True,savepath='plots/diversity_enemy7_new')
-    plot_stat_mean(stat_key='diversity', enemy=6, fancy=True,savepath='plots/diversity_enemy6_new')
-    plot_stat_mean(stat_key='diversity', enemy=2, fancy=True,savepath='plots/diversity_enemy2_new')
+    #plot_stat_mean(stat_key='diversity', enemy=7, fancy=True,savepath='plots/diversity_enemy7_new')
+    #plot_stat_mean(stat_key='diversity', enemy=6, fancy=True,savepath='plots/diversity_enemy6_new')
+    #plot_stat_mean(stat_key='diversity', enemy=2, fancy=True,savepath='plots/diversity_enemy2_new')
 
-    plot_stat_mean(stat_key='mean', enemy=7, fancy=True,savepath='plots/fitness_enemy7_new')
-    plot_stat_mean(stat_key='mean', enemy=6, fancy=True,savepath='plots/fitness_enemy6_new')
-    plot_stat_mean(stat_key='mean', enemy=2, fancy=True,savepath='plots/fitness_enemy2_new')
+    plot_stat_mean(stat_key='mean', enemy=(1,2,5), fancy=True,savepath='plots/fitness_enemy1_2_5')
+    plot_stat_mean(stat_key='mean', enemy=(2,6,7), fancy=True,savepath='plots/fitness_enemy2_6_7')
+    #plot_stat_mean(stat_key='mean', enemy=2, fancy=True,savepath='plots/fitness_enemy2_new')
     #plot_diversity(logs)
