@@ -69,8 +69,8 @@ if __name__ == "__main__":
                 ind_results = []
                 for iter in range(5):
                     fit, e_p, e_e, t = env.play(pcont=np.asarray(individual))
-                    ind_results.append(e_p-e_e)
-                results[method].append(mean(ind_results))
+                    ind_results.append((e_p,e_e))
+                results[method].append(ind_results)
 
         enemy_results[en] = results
 
