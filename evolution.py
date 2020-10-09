@@ -16,7 +16,7 @@ from scoop import futures
 # local imports
 sys.path.insert(0, 'evoman')
 from environment import Environment
-from util import process_config
+from util import process_config, update_best_list
 from representations import select_representation
 from diversity import diversity, diversity_gain
 from nsga2 import fast_non_dominated_sort
@@ -35,6 +35,7 @@ def start_evolution(args, config):
     # setup deap toolbox and statistics
     toolbox = base.Toolbox()
     top5 = tools.HallOfFame(5)
+    my_top5 = []
     if args.scalarisation:
         stats = tools.Statistics(lambda x: x.fitness.values)
     else:
@@ -175,6 +176,7 @@ def start_evolution(args, config):
 
         # record statistics and save intermediate results
         top5.update(population)
+        my_top5 = update_best_list(my_top5, population)
         record = stats.compile(population)
         logs[-1].record(generation=i, fit_evaluations=fit_evaluations, **record)
         # print progress
@@ -189,6 +191,7 @@ def start_evolution(args, config):
     pickle.dump(top5, open(os.path.join(save_path, "top5_iter_{}".format(i)), "wb"))
     pickle.dump(config, open(os.path.join(save_path, "config"), "wb"))
     pickle.dump(args, open(os.path.join(save_path, "args"), "wb"))
+    pickle.dump(my_top5, open(os.path.join(save_path, "my_top5_iter_{}".format(i)), "wb"))
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+from statistics import mean
 from fitness import *
 from mating import *
 from mutation import *
@@ -75,3 +76,9 @@ def select_selection(fct_name):
         return crowding_tournament_pairs
     else:
         raise RuntimeError("Unknown type of selection encountered! Please check your config.")
+
+
+def update_best_list(best_list, population, top_k=5):
+    best_pop = sorted(population, key=lambda x: mean(x.fitness.values), reverse=True)[:top_k]
+    candidates = [top for top in best_pop if top not in best_list]
+    return sorted(best_list+candidates, key=lambda x: mean(x.fitness.values), reverse=True)[:top_k]
