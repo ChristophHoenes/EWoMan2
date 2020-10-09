@@ -15,6 +15,7 @@ from demo_controller import player_controller
 
 def get_best_individuals(enemy=(1, 2, 5)):
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
+    creator.create("FitnessMulti", base.Fitness, weights=(1.0,) * len(enemy))
     creator.create("Individual", list, fitness=creator.FitnessMax)
 
     top_individuals = defaultdict(list)
