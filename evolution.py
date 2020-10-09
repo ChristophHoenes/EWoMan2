@@ -6,6 +6,7 @@ import random
 import sys
 import os
 from time import time, strftime, gmtime
+from statistics import mean, stdev
 
 # third party imports
 import numpy as np
@@ -34,7 +35,10 @@ def start_evolution(args, config):
     # setup deap toolbox and statistics
     toolbox = base.Toolbox()
     top5 = tools.HallOfFame(5)
-    stats = tools.Statistics(lambda x: x.fitness.values)
+    if args.scalarisation:
+        stats = tools.Statistics(lambda x: x.fitness.values)
+    else:
+        stats = tools.Statistics(lambda x: mean(x.fitness.values)-stdev(x.fitness.values))
     stats.register("mean", np.mean)
     stats.register("std", np.std)
     stats.register("max", np.max)
