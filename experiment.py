@@ -13,24 +13,25 @@ from environment import Environment
 from demo_controller import player_controller
 
 
-def get_best_individuals(enemy=2):
+def get_best_individuals(enemy=(1, 2, 5)):
     creator.create("FitnessMax", base.Fitness, weights=(1.0,))
     creator.create("Individual", list, fitness=creator.FitnessMax)
 
     top_individuals = defaultdict(list)
 
     seeds = [111, 222, 333, 444, 555, 666, 777, 888, 999, 1010]
-    methods = ["method_1", "method2", "method3"]
+    methods = ["scalarization", "nsga2"]
     for method in methods:
-        if method == 'method_1':
-            prefix = 'roundrobin'
-        elif method == 'method2':
-            prefix = 'diversity_roundrobin'
-        elif method == "method3":
-            prefix = "diversity_075_roundrobin"
+        if method == 'scalarization':
+            prefix = 'scalarization'
+        elif method == 'nsga2':
+            prefix = 'nsga2'
+
+        enemies_str = ("{}" + "_{}" * (len(enemy) - 1)).format(*enemy)
+
         for seed in seeds:
 
-            top5_path = 'results/{}/{}_enemy{}_seed_{}/top5_iter_30'.format(method, prefix, enemy, seed)
+            top5_path = 'results/{}/{}_enemy{}_seed_{}/top5_iter_100'.format(method, prefix, enemies_str, seed)
             top_ind = pickle.load(open(top5_path, "rb"))[0]
             top_individuals[method].append(top_ind)
 
@@ -39,7 +40,7 @@ def get_best_individuals(enemy=2):
 
 if __name__ == "__main__":
 
-    enemies = [2,6,7]
+    enemies = [1, 2, 3, 4, 5, 6, 7, 8]
     num_neurons = 10
     enemy_results = {}
 
@@ -60,16 +61,14 @@ if __name__ == "__main__":
                           contacthurt="player",
                           sound="off")
 
-        top_individuals = get_best_individuals(enemy=en)
+        top_individuals = get_best_individuals(enemy=(1, 2, 5))
         results = defaultdict(list)
-        methods = ["method_1", "method3"]
+        methods = ["scalarization", "nsga2"]
         for method in methods:
             for individual in top_individuals[method]:
                 ind_results = []
                 for iter in range(5):
-                    os.chdir('./evoman_framework')
                     fit, e_p, e_e, t = env.play(pcont=np.asarray(individual))
-                    os.chdir('../')
                     ind_results.append(e_p-e_e)
                 results[method].append(mean(ind_results))
 
