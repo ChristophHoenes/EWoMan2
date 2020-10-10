@@ -14,10 +14,8 @@ def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2_2'), enemy=
     for method in methods:
         if method == 'scalarization':
             prefix = 'scalarization'
-        elif method == 'nsga2':
+        elif method == 'nsga2' or method == 'nsga2_2':
             prefix = 'nsga2'
-        elif method == 'nsga2_2':
-            prefix = 'nsga2_2'
         for seed in seeds:
             log_path = 'results/{}/{}_enemy{}_seed_{}/logs_iter_100'.format(method, prefix, enemies_str, seed)
             logs = pickle.load(open(log_path, "rb"))

@@ -21,6 +21,7 @@ def fast_non_dominated_sort(population, k=None):
         # add to first level frontier if not dominated by any other individual
         if n[p_id] == 0:
             frontiers[1].add(p_id)
+            rank[p_id] = 1
 
     i = 1
     num_sorted = 0

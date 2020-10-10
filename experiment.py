@@ -21,18 +21,23 @@ def get_best_individuals(enemy=(1, 2, 5)):
     top_individuals = defaultdict(list)
 
     seeds = [111, 222, 333, 444, 555, 666, 777, 888, 999, 1010]
-    methods = ["scalarization", "nsga2"]
+    methods = ["scalarization", "nsga2_2"]
     for method in methods:
         if method == 'scalarization':
             prefix = 'scalarization'
+            top5_type = 'top5'
         elif method == 'nsga2':
             prefix = 'nsga2'
+            top5_type = 'top5'
+        elif method == 'nsga2_2':
+            prefix = 'nsga2'
+            top5_type = 'my_top5'
 
         enemies_str = ("{}" + "_{}" * (len(enemy) - 1)).format(*enemy)
 
         for seed in seeds:
 
-            top5_path = 'results/{}/{}_enemy{}_seed_{}/top5_iter_100'.format(method, prefix, enemies_str, seed)
+            top5_path = 'results/{}/{}_enemy{}_seed_{}/{}_iter_100'.format(method, prefix, enemies_str, seed, top5_type)
             top_ind = pickle.load(open(top5_path, "rb"))[0]
             top_individuals[method].append(top_ind)
 
