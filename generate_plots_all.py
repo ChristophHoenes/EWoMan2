@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2'), enemy=(1, 2, 5), seeds=None, prefix=None, fancy=False, savepath=''):
+def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2_2'), enemy=(1, 2, 5), seeds=None, prefix=None, fancy=False, savepath=''):
     runs = []
     max_list = []
     if seeds is None:
@@ -16,6 +16,8 @@ def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2'), enemy=(1
             prefix = 'scalarization'
         elif method == 'nsga2':
             prefix = 'nsga2'
+        elif method == 'nsga2_2':
+            prefix = 'nsga2_2'
         for seed in seeds:
             log_path = 'results/{}/{}_enemy{}_seed_{}/logs_iter_100'.format(method, prefix, enemies_str, seed)
             logs = pickle.load(open(log_path, "rb"))
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     #plot_stat_mean(stat_key='diversity', enemy=6, fancy=True,savepath='plots/diversity_enemy6_new')
     #plot_stat_mean(stat_key='diversity', enemy=2, fancy=True,savepath='plots/diversity_enemy2_new')
 
-    plot_stat_mean(stat_key='mean', enemy=(1,2,5), fancy=True,savepath='plots/fitness_enemy1_2_5')
-    plot_stat_mean(stat_key='mean', enemy=(2,6,7), fancy=True,savepath='plots/fitness_enemy2_6_7')
+    plot_stat_mean(stat_key='mean', enemy=(1, 2, 5), fancy=True,savepath='plots/fitness_enemy1_2_5')
+    plot_stat_mean(stat_key='mean', enemy=(2, 6, 7), fancy=True,savepath='plots/fitness_enemy2_6_7')
     #plot_stat_mean(stat_key='mean', enemy=2, fancy=True,savepath='plots/fitness_enemy2_new')
     #plot_diversity(logs)

@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2'), enemy=(1, 2, 5), seeds=None, prefix=None, fancy=False, savepath=''):
+def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2_2'), enemy=(1, 2, 5), seeds=None, prefix=None, fancy=False, savepath=''):
     runs = []
     if seeds is None:
         seeds = [111, 222, 333, 444, 555, 666, 777, 888, 999, 1010]
@@ -15,6 +15,8 @@ def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2'), enemy=(1
             prefix = 'scalarization'
         elif method == 'nsga2':
             prefix = 'nsga2'
+        elif method == 'nsga2_2':
+            prefix = 'nsga2_2'
         for seed in seeds:
             log_path = 'results/{}/{}_enemy{}_seed_{}/logs_iter_100'.format(method, prefix, enemies_str, seed)
             logs = pickle.load(open(log_path, "rb"))
