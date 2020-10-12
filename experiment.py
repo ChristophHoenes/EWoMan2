@@ -21,7 +21,7 @@ def get_best_individuals(enemy=(1, 2, 5)):
     top_individuals = defaultdict(list)
 
     seeds = [111, 222, 333, 444, 555, 666, 777, 888, 999, 1010]
-    methods = ["scalarization", "nsga2_2"]
+    methods = ["scalarization", "nsga2_3"]
     for method in methods:
         if method == 'scalarization':
             prefix = 'scalarization'
@@ -29,7 +29,7 @@ def get_best_individuals(enemy=(1, 2, 5)):
         elif method == 'nsga2':
             prefix = 'nsga2'
             top5_type = 'top5'
-        elif method == 'nsga2_2':
+        elif method == 'nsga2_2' or method == 'nsga2_3':
             prefix = 'nsga2'
             top5_type = 'my_top5'
 
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
         top_individuals = get_best_individuals(enemy=(1, 2, 5))
         results = defaultdict(list)
-        methods = ["scalarization", "nsga2"]
+        methods = ["scalarization", "nsga2_3"]
         for method in methods:
             for individual in top_individuals[method]:
                 ind_results = []
