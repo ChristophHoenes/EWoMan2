@@ -39,10 +39,10 @@ def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2_3'), enemy=
             legend_label = ''
 
             if method =='scalarization':
-                m = 'm1'
+                m = 'scal.'
                 color = 'magenta'
             else:
-                m = 'm2'
+                m = 'nsga2'
                 color = 'green'
             if stat_key == 'mean': 
                 legend_label = 'mean '
@@ -50,10 +50,12 @@ def plot_stat_mean(stat_key='mean', methods=('scalarization', 'nsga2_3'), enemy=
                 plt.fill_between(np.arange(len(mean)), max_mean-max_std, max_mean+max_std, alpha=.25,color=color)
             
             plt.errorbar(np.arange(len(mean)), mean, std, alpha=.75, fmt=':', capsize=3, capthick=1, label = legend_label+ m)
-            plt.legend(loc='best', shadow=True, fontsize='x-small')
+            plt.legend(loc='best', shadow=True, fontsize=12)
             plt.fill_between(np.arange(len(mean)), mean-std, mean+std, alpha=.25)
-            plt.ylabel(ylab)
-            plt.xlabel('iteration')
+            plt.ylabel(ylab, fontsize=20)
+            plt.yticks(fontsize=14)
+            plt.xlabel('iteration', fontsize=20)
+            plt.xticks(fontsize=14)
             plt.rcParams["font.size"] = "20"
             plt.suptitle('Results for ' + ylab + ' enemies {}'.format(enemies_str.replace('_',',')))
         else:
@@ -81,7 +83,7 @@ if __name__ == "__main__":
     #plot_stat_mean(stat_key='diversity', enemy=6, fancy=True,savepath='plots/diversity_enemy6_new')
     #plot_stat_mean(stat_key='diversity', enemy=2, fancy=True,savepath='plots/diversity_enemy2_new')
 
-    plot_stat_mean(stat_key='mean', enemy=(1, 2, 5), fancy=True,savepath='plots/fitness_enemy1_2_5')
-    plot_stat_mean(stat_key='mean', enemy=(2, 6, 7), fancy=True,savepath='plots/fitness_enemy2_6_7')
+    plot_stat_mean(stat_key='mean', enemy=(1, 2, 5), fancy=True,savepath='plots/fitness_enemy1_2_5.pdf')
+    plot_stat_mean(stat_key='mean', enemy=(2, 6, 7), fancy=True,savepath='plots/fitness_enemy2_6_7.pdf')
     #plot_stat_mean(stat_key='mean', enemy=2, fancy=True,savepath='plots/fitness_enemy2_new')
     #plot_diversity(logs)

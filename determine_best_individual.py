@@ -79,5 +79,4 @@ if __name__ == "__main__":
         best_win = pickle.load(f)
     print(best_win[0])
 
-
-
+    np.savetxt("70.txt", np.asarray(best_gain[0]))
